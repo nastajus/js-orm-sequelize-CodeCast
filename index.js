@@ -5,10 +5,6 @@ let connection = new Sequelize('sequelize_db_cc', 'sequelize_user_cc', 'sequeliz
 
 let Article = connection.define('article', {
 	//id
-	slug: {
-		type: Sequelize.STRING,
-		//primaryKey: true
-	},
 	title: {
 		type: Sequelize.STRING,
 		unique: true,
@@ -33,6 +29,10 @@ let Article = connection.define('article', {
 				}
 			}
 		}
+	},
+	approved: {
+		type: Sequelize.BOOLEAN,
+		defaultValue: false         //false == 0, true == 1   in table
 	}
 
 }, {
@@ -45,57 +45,27 @@ connection
 		logging: console.log
 	})
 	.then(function () {
-		//return
-		//persists the record too (commits)
-		Article.create({
-			title: '123412341234',
-			slug: 'qwerqwer',
-			body: 'Woqwerqwerqwerbble'
-		})
 
-		//creates a record but have not yet persisted it.
-		let articleInstance = Article.build({
-			title: 'bbbuuubbly',
-			slug: 'bowser',
-			body: 'Bower'
-		})
-		articleInstance.save();
-		//gives us an immediately reference to the model instance
-		//in certain scenarios, especially when working with many-to-many relationships
-		//sequelize will add contextual methods to the object we can utilize
-		//so-called "contextual methods"
+		//white list
+		//white list settable-attributes
 
-		//can use `build()` and `create()` interchangeably depending on preference
-
-		Article.build({
-			title: 'cuddles of cuddle-land',
-			slug: 'cute-cuddly-cats',
-			body: 'Cats are meant to be cuddled'
-		}).save();
-		//which is equivalent to using the `create` function
-
-
-		//these functions `create()` and `build()` are asynchronous
-		//since saving a record can take even upwards of a few seconds.
-		//so, instead of making you wait, they return immediately a promise object,
-		//which represents the state of the operation
-		//by default the state is pending.
-		//but you can attach a `callback function` to be called when the promise is being `fulfilled`
-		//often when you access a callback like this,
-		//it's because you want to access new information about the record you just inserted
-		//info like the auto-incremented primary key value
-		//or maybe the createdAt()
-
-		Article.create({
-			title: 'Some title',
-			body: 'Some body'
+		//pretend this is an express web server
+		//improve the resilience of your code
+		//especially when inserting user-form-submitted data
+		let req = {
+			body: {
+				approved: true, //WHITE LISTING SET TO IGNORE THIS
+				title: 'Some request title',
+				body: 'Some request body'
+			}
+		}
+		//pass the value of `req.body` to the `create()` function
+		Article.create(req.body, {
+			fields: ['title', 'body'] //BUT NOT 'approved' TO LIMIT ACCESS.
 		}).then(function(insertedArticle) {
-			//console.log(insertedArticle);
-			console.log(insertedArticle.dataValues);    //access that dataValues property by using `refinements` ("dot-syntax")
+			console.log(insertedArticle.dataValues);
 		})
-		// we can actually used the generated value (primary key `id`) to define a foreign key
-		// for an associated record.
-		// that is the most common reason to want to access the primary key.
+		//nothing inherently wrong passing `req.body` to the `create()` like this, but
 
 	})
 	.catch(function (error) {
