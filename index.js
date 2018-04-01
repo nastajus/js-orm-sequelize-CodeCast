@@ -4,6 +4,10 @@ let connection = new Sequelize('sequelize_db_cc', 'sequelize_user_cc', 'sequeliz
 
 
 let Article = connection.define('article', {
+	slug: {
+		type: Sequelize.STRING,
+		primaryKey: true
+	},
 	title: {
 		type: Sequelize.STRING,
 		unique: true,
@@ -14,12 +18,12 @@ let Article = connection.define('article', {
 		defaultValue: 'Coming soon...'
 	}
 }, {
-	timestamp: false,
-	freezeTableName: true
+	timestamps: false,
 });
-	//* normally connection.define(...) takes two arguments
-	//* to eliminate extra date cols we pass a third argument
 
-connection.sync().then(function() {
+connection.sync({force:true, logging:true}).then(function() {
 
 });
+	//* you cannot update tables with the sync() function
+	//* sync() only creates tables if they do not already exist
+
