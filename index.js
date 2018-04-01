@@ -13,7 +13,10 @@ let Article = connection.define('article', {
 		unique: true,
 		allowNull: false,
 		validate: {
-			len: [10, 150]
+			len: {
+				args: [10, 150],
+				msg: 'Please enter a title with at least 10 chars but no more than 150'
+			}
 		}
 	},
 	body: {
