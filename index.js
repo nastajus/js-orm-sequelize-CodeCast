@@ -44,29 +44,22 @@ connection
 		force: true,
 		logging: console.log
 	})
-	.then(function () {
+	.then(function() {
 
-		//white list
-		//white list settable-attributes
-
-		//pretend this is an express web server
-		//improve the resilience of your code
-		//especially when inserting user-form-submitted data
-		let req = {
-			body: {
-				approved: true, //WHITE LISTING SET TO IGNORE THIS
-				title: 'Some request title',
-				body: 'Some request body'
+		//bulk create
+		//accomplishes inserts in a very declarative & succinct manner
+		Article.bulkCreate([
+			{
+				title: 'Article 1',
+				body: 'Article 1'
+			},
+			{
+				title: 'Article 2',
+				body: 'Article 2'
 			}
-		}
-		//pass the value of `req.body` to the `create()` function
-		Article.create(req.body, {
-			fields: ['title', 'body'] //BUT NOT 'approved' TO LIMIT ACCESS.
-		}).then(function(insertedArticle) {
-			console.log(insertedArticle.dataValues);
-		})
-		//nothing inherently wrong passing `req.body` to the `create()` like this, but
-
+		])
+		//IDE warns: Promise returned from bulkCreate is ignored.  This inspection reports function calls that return a Promise that is not later used. These are usually unintended and indicate an error.
+		//in this case I'm certain it's a deliberate choice by the Sequelize library authors, based on their knowledge of promises.
 	})
 	.catch(function (error) {
 		console.log(error);
