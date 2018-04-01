@@ -11,7 +11,10 @@ let Article = connection.define('article', {
 	title: {
 		type: Sequelize.STRING,
 		unique: true,
-		allowNull: false
+		allowNull: false,
+		validate: {
+			len: [10, 150]
+		}
 	},
 	body: {
 		type: Sequelize.TEXT,
@@ -27,9 +30,14 @@ connection
 		logging: console.log
 	})
 	.then(function () {
+		return Article.create({
+			title: 'asdf',
+			slug: 'wibble',
+			body: 'wobble'
+		})
 
 	})
-	.catch(function () {
+	.catch(function (error) {
 		console.log(error);
 	});
 
