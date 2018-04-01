@@ -11,7 +11,6 @@ let Article = connection.define('article', {
 	title: {
 		type: Sequelize.STRING,
 		unique: true,
-		allowNull: false,
 		validate: {
 			len: {
 				args: [10, 150],
@@ -21,8 +20,20 @@ let Article = connection.define('article', {
 	},
 	body: {
 		type: Sequelize.TEXT,
-		defaultValue: 'Coming soon...'
+		defaultValue: 'Coming soon...',
+		validate: {
+			startsWithUpper: function (bodyVal) {
+				let first = bodyVal.charAt(0);
+				let startsWithUpper = first === first.toUpperCase();
+				if (!startsWithUpper) {
+					throw new Error('First letter must be a uppercase letter.');
+				} else {
+					// ...
+				}
+			}
+		}
 	}
+
 }, {
 	timestamps: false,
 });
@@ -34,9 +45,9 @@ connection
 	})
 	.then(function () {
 		return Article.create({
-			title: 'asdf',
+			title: 'asdfasdfasdf',
 			slug: 'wibble',
-			body: 'wobble'
+			body: 'Wobble'
 		})
 
 	})
