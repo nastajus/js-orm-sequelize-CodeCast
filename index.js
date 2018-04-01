@@ -4,9 +4,10 @@ let connection = new Sequelize('sequelize_db_cc', 'sequelize_user_cc', 'sequeliz
 
 
 let Article = connection.define('article', {
+	//id
 	slug: {
 		type: Sequelize.STRING,
-		primaryKey: true
+		//primaryKey: true
 	},
 	title: {
 		type: Sequelize.STRING,
@@ -73,6 +74,28 @@ connection
 		}).save();
 		//which is equivalent to using the `create` function
 
+
+		//these functions `create()` and `build()` are asynchronous
+		//since saving a record can take even upwards of a few seconds.
+		//so, instead of making you wait, they return immediately a promise object,
+		//which represents the state of the operation
+		//by default the state is pending.
+		//but you can attach a `callback function` to be called when the promise is being `fulfilled`
+		//often when you access a callback like this,
+		//it's because you want to access new information about the record you just inserted
+		//info like the auto-incremented primary key value
+		//or maybe the createdAt()
+
+		Article.create({
+			title: 'Some title',
+			body: 'Some body'
+		}).then(function(insertedArticle) {
+			//console.log(insertedArticle);
+			console.log(insertedArticle.dataValues);    //access that dataValues property by using `refinements` ("dot-syntax")
+		})
+		// we can actually used the generated value (primary key `id`) to define a foreign key
+		// for an associated record.
+		// that is the most common reason to want to access the primary key.
 
 	})
 	.catch(function (error) {
