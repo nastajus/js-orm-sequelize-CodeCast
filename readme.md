@@ -12,3 +12,11 @@ https://www.youtube.com/watch?v=Z1O9iddzcXk (4/TBD) validation
 skip (5)
 
 https://www.youtube.com/watch?v=JAld7bV5qV8&index=6&list=PL5ze0DjYv5DYBDfl0vF_VRxEu8JdTIHlR (6 and final)
+
+
+have concluded this series by Code Cast
+
+Some actionables to probably look into:
+* Promises in JavaScript
+* Associations in Sequelize || in general in Databases
+* Transactions in Sequelize
