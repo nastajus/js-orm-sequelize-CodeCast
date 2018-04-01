@@ -4,18 +4,22 @@ let connection = new Sequelize('sequelize_db_cc', 'sequelize_user_cc', 'sequeliz
 
 
 let Article = connection.define('article', {
-	//id
-	title: Sequelize.STRING,
-	body: Sequelize.TEXT
-	//createdAt
-	//updatedAt
+	title: {
+		type: Sequelize.STRING,
+		unique: true,
+		allowNull: false
+	},
+	body: {
+		type: Sequelize.TEXT,
+		defaultValue: 'Coming soon...'
+	}
+}, {
+	timestamp: false,
+	freezeTableName: true
 });
-	//* creates plural version as table name
+	//* normally connection.define(...) takes two arguments
+	//* to eliminate extra date cols we pass a third argument
 
 connection.sync().then(function() {
-	Article.findAll().then(function(articles) {
-		console.log(articles.length);
-		//* you could pass these on to a view and render it on a web page
-		//* it's not very feasible to load all your records in-memory
-	})
+
 });
