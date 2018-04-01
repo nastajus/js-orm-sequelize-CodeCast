@@ -6,23 +6,16 @@ let connection = new Sequelize('sequelize_db_cc', 'sequelize_user_cc', 'sequeliz
 let Article = connection.define('article', {
 	//id
 	title: Sequelize.STRING,
-	body: Sequelize.TEXT    //much longer string type
+	body: Sequelize.TEXT
 	//createdAt
 	//updatedAt
 });
-
-let Test = connection.define('test', {
-	something: Sequelize.STRING
-});
 	//* creates plural version as table name
 
-//connection.sync();
-	//1. will connect to database
-	//2. will generate the SQL that creates corresponding table in db
-
 connection.sync().then(function() {
-	Article.findById(1).then(function(article){
-		console.log(article.dataValues);
+	Article.findAll().then(function(articles) {
+		console.log(articles.length);
+		//* you could pass these on to a view and render it on a web page
+		//* it's not very feasible to load all your records in-memory
 	})
 });
-	//* since sync might take a long time, this must be designed to insert via callback.
