@@ -1,6 +1,6 @@
 let Sequelize = require('sequelize');
 
-let connection = new Sequelize('sequelize_db_cc', 'sequelize_user_cc', 'sequelize_pass_cc', { dialect: 'mysql'}); //mysql is default
+let connection = new Sequelize('sequelize_db_cc', 'sequelize_user_cc', 'sequelize_pass_cc', {dialect: 'mysql'}); //mysql is default
 
 
 let Article = connection.define('article', {
@@ -21,9 +21,15 @@ let Article = connection.define('article', {
 	timestamps: false,
 });
 
-connection.sync({force:true, logging:true}).then(function() {
+connection
+	.sync({
+		force: true,
+		logging: console.log
+	})
+	.then(function () {
 
-});
-	//* you cannot update tables with the sync() function
-	//* sync() only creates tables if they do not already exist
+	})
+	.catch(function () {
+		console.log(error);
+	});
 
